@@ -15,22 +15,43 @@ import org.json.JSONObject;
 
 public class Main {
 
+	final static double VERSION = 1.0;
+	final static String TOD_SEARCHLOCATION = "http://transport.opendata.ch/v1/locations?query=";
+	final static String TOD_STATIONBOARD = "http://transport.opendata.ch/v1/stationboard?station=";
+
 	public static void main(String[] args) {
+		System.out.println("Welcome to TerminalFahrplan " + VERSION);
 		String station = readStation();
 		System.out.println("Loading data for " + station + "...");
+		//clearConsole();
+		while (true) {
+			try {
+				String url = TOD_STATIONBOARD + station;
+				url = url.replaceAll(" ", "%20");
+				JSONArray stationboard = readJsonFromUrl(url).getJSONArray("stationboard");
+				System.out.println(stationboard.getJSONObject(0).get("name"));
+				Thread.sleep(1000);
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (JSONException e) {
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	private static String readStation() {
 		String station;
 		Scanner scanner = new Scanner(System.in);
-		String domain = "http://transport.opendata.ch/v1/locations?query=";
+
 		boolean stationFound = false;
 
 		do {
 			System.out.println("Please enter your location: ");
 			station = scanner.next();
 			try {
-				JSONArray stations = readJsonFromUrl(domain + station + "&type=station").getJSONArray("stations");
+				JSONArray stations = readJsonFromUrl(TOD_SEARCHLOCATION + station + "&type=station").getJSONArray("stations");
 				if (stations.length() > 0) {
 					System.out.println("Did you mean " + stations.getJSONObject(0).getString("name") + "? (y/n)");
 					String result = scanner.next();
@@ -73,6 +94,20 @@ public class Main {
 			sb.append((char) cp);
 		}
 		return sb.toString();
+	}
+
+	private final static void clearConsole() {
+		try {
+			final String os = System.getProperty("os.name");
+
+			if (os.contains("Windows")) {
+				Runtime.getRuntime().exec("cls");
+			} else {
+				Runtime.getRuntime().exec("clear");
+			}
+		} catch (final Exception e) {
+			//  Handle any exceptions.
+		}
 	}
 
 }
