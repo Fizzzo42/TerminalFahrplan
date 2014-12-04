@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 
 import org.json.JSONArray;
@@ -18,6 +20,7 @@ public class Main {
 	final static double VERSION = 1.0;
 	final static String TOD_SEARCHLOCATION = "http://transport.opendata.ch/v1/locations?query=";
 	final static String TOD_STATIONBOARD = "http://transport.opendata.ch/v1/stationboard?station=";
+	final static int NUM_SHOW_ROWS = 3;
 
 	public static void main(String[] args) {
 		System.out.println("Welcome to TerminalFahrplan " + VERSION);
@@ -26,13 +29,22 @@ public class Main {
 		//clearConsole();
 		while (true) {
 			try {
+				clearConsole();
 				String url = TOD_STATIONBOARD + station;
 				url = url.replaceAll(" ", "%20");
 				JSONArray stationboard = readJsonFromUrl(url).getJSONArray("stationboard");
-				System.out.println(stationboard.getJSONObject(0).get("name"));
+				for (int i = 0; i < (NUM_SHOW_ROWS > stationboard.length() ? stationboard.length() : NUM_SHOW_ROWS); i++) {
+					//Sys out row data
+					System.out.print(stationboard.getJSONObject(i).get("name") + "\t");
+					Date departure = new Date(stationboard.getJSONObject(i).getJSONObject("stop").getLong("departureTimestamp") * 1000);
+					SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+					System.out.print(sdf.format(departure));
+					System.out.println("");
+				}
+				System.out.println("---------------------------------------");
 				Thread.sleep(1000);
 			} catch (IOException e) {
-				e.printStackTrace();
+				System.out.println("Retrying...");
 			} catch (JSONException e) {
 				e.printStackTrace();
 			} catch (InterruptedException e) {
