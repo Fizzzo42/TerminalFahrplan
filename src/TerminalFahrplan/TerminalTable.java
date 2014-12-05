@@ -4,16 +4,13 @@ import java.util.ArrayList;
 
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.Ansi.Color;
-import org.fusesource.jansi.AnsiConsole;
-import org.fusesource.jansi.AnsiOutputStream;
-import org.fusesource.jansi.AnsiString;
 
 public class TerminalTable {
 
 	private Row header;
 	private ArrayList<Row> entries;
 	private int columnSizes[];
-	private final static int COLUMNSIZE_OFFSET = 5;
+	private final static int COLUMNSIZE_OFFSET = 3;
 
 	public TerminalTable() {
 		//header = new ArrayList<>();

@@ -25,10 +25,9 @@ public class Main {
 	final static String TOD_SEARCHLOCATION = "http://transport.opendata.ch/v1/locations?query=";
 	final static String TOD_STATIONBOARD = "http://transport.opendata.ch/v1/stationboard?station=";
 	final static int NUM_SHOW_ROWS = 20;
-	final static SimpleDateFormat SDF = new SimpleDateFormat("YYYY-MM-dd'T'HH:mm:ssZZZZZ");
+	final static SimpleDateFormat SDF = new SimpleDateFormat("YYYY-MM-dd'T'HH:mm:ssZZZZZ"); //Given from the API
 
 	public static void main(String[] args) {
-		//Ansi ansi = new Ansi();
 		AnsiConsole.systemInstall();
 		Ansi ansi = Ansi.ansi();
 
@@ -38,20 +37,22 @@ public class Main {
 
 		while (true) {
 			try {
-				TerminalTable tt = new TerminalTable(new Row("Name", "Dep. Time", "Late"));
+				TerminalTable tt = new TerminalTable(new Row("Bezeichnung", "Von", "Abfahrt", "Versp."));
 				String url = TOD_STATIONBOARD + station;
 				url = url.replaceAll(" ", "%20");
 				JSONArray stationboard = readJsonFromUrl(url).getJSONArray("stationboard");
 				int numRows = NUM_SHOW_ROWS > stationboard.length() ? stationboard.length() : NUM_SHOW_ROWS;
 				for (int i = 0; i < numRows; i++) {
 					Row nextRow = new Row();
-					//Name
+					//Bezeichnung
 					nextRow.addData(stationboard.getJSONObject(i).get("name"));
-					//Departure Time
+					//Von
+					nextRow.addData(stationboard.getJSONObject(i).getJSONObject("stop").getJSONObject("station").getString("name"));
+					//Abfahrtszeit
 					Date departure = dateFromString(stationboard.getJSONObject(i).getJSONObject("stop").get("departure").toString(), SDF);
 					SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 					nextRow.addData(sdf.format(departure));
-					//Too late
+					//Verspätung
 					String dateString = stationboard.getJSONObject(i).getJSONObject("stop").getJSONObject("prognosis").get("departure")
 							.toString();
 					if (dateString == "null")
@@ -62,7 +63,7 @@ public class Main {
 						nextRow.setImportant(true);
 					}
 					//Next
-					
+
 					tt.addEntry(nextRow);
 				}
 				System.out.println(ansi.eraseScreen());
