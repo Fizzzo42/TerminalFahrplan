@@ -21,36 +21,46 @@ public class Main {
 	final static String TOD_SEARCHLOCATION = "http://transport.opendata.ch/v1/locations?query=";
 	final static String TOD_STATIONBOARD = "http://transport.opendata.ch/v1/stationboard?station=";
 	final static int NUM_SHOW_ROWS = 3;
+	//Table formatting parameters
+	final static int TABLESIZE_NAME = 10;
+	final static int TABLESIZE_DEPTIME = 10;
 
 	public static void main(String[] args) {
+
 		System.out.println("Welcome to TerminalFahrplan " + VERSION);
 		String station = readStation();
 		System.out.println("Loading data for " + station + "...");
+
 		//clearConsole();
 		while (true) {
 			try {
 				clearConsole();
+				printHeader();
 				String url = TOD_STATIONBOARD + station;
 				url = url.replaceAll(" ", "%20");
 				JSONArray stationboard = readJsonFromUrl(url).getJSONArray("stationboard");
-				for (int i = 0; i < (NUM_SHOW_ROWS > stationboard.length() ? stationboard.length() : NUM_SHOW_ROWS); i++) {
-					//Sys out row data
-					System.out.print(stationboard.getJSONObject(i).get("name") + "\t");
+				//Min ;)
+				int numRows = NUM_SHOW_ROWS > stationboard.length() ? stationboard.length() : NUM_SHOW_ROWS;
+				for (int i = 0; i < numRows; i++) {
+					//Name
+					System.out.format("%-" + TABLESIZE_NAME + "s", stationboard.getJSONObject(i).get("name"));
+					//Departure Time
 					Date departure = new Date(stationboard.getJSONObject(i).getJSONObject("stop").getLong("departureTimestamp") * 1000);
 					SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-					System.out.print(sdf.format(departure));
+					System.out.format("%-" + TABLESIZE_DEPTIME + "s", sdf.format(departure));
+					//Next
 					System.out.println("");
 				}
-				System.out.println("---------------------------------------");
 				Thread.sleep(1000);
 			} catch (IOException e) {
-				System.out.println("Retrying...");
+				//Connection Error...
 			} catch (JSONException e) {
 				e.printStackTrace();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
+
 	}
 
 	private static String readStation() {
@@ -120,6 +130,13 @@ public class Main {
 		} catch (final Exception e) {
 			//  Handle any exceptions.
 		}
+	}
+
+	private static void printHeader() {
+		System.out.format("%-" + TABLESIZE_NAME + "s", "Name");
+		System.out.format("%-" + TABLESIZE_DEPTIME + "s", "Dep. Time");
+		System.out.println();
+		System.out.println("----------------------------------------------------");
 	}
 
 }
