@@ -59,6 +59,7 @@ public class Main {
 					else {
 						long tooLateTimeInMillis = dateFromString(dateString, SDF).getTime() - departure.getTime();
 						nextRow.addData(tooLateTimeInMillis / 60000 + "'");
+						nextRow.setImportant(true);
 					}
 					//Next
 					

@@ -5,16 +5,11 @@ The service will be limited to switzerland only. Reason for that is the [chosen 
 ## Current State
 State: **In Progress** (about 20% finished)
 ## How it works
-1. You are prompted to enter your station  
-`Welcome to TerminalFahrplan 1.0`  
-`Please enter your location:`
-2. You enter **höng** and press **y**  
-`höng`  
-`Did you mean Zürich, Hönggerberg? (y/n)`  
-`y`  
-`Loading data for Zürich, Hönggerberg...`
-3. Done! Your View of the timing table will be refreshed every ***X*** seconds.  
-![Main View](comingsoon "TerminalFahrplan")  
+1. You are prompted to enter your station.  
+Enter **zuri** for example and press **y**  
+![Main View](img/introView.png "TerminalFahrplan")
+2. Done! Your View of the timing table will be refreshed every ***X*** seconds.  
+![Main View](img/mainView.png "TerminalFahrplan")  
 
 ## How to setup
 1. Open a Terminal and locate to the project path
