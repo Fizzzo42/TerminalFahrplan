@@ -78,7 +78,7 @@ public class Main {
 			} catch (JSONException e) {
 				System.out.println("Please retry! JSONExpection");
 			} catch (IOException e) {
-				System.out.println("Please retry! IOException");
+				System.out.println("Conntection Error... Please retry!");
 			}
 		} while (!stationFound);
 
