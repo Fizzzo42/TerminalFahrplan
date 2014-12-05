@@ -7,10 +7,15 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 
+import org.fusesource.jansi.Ansi;
+import org.fusesource.jansi.Ansi.Color;
+import org.fusesource.jansi.AnsiConsole;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,13 +25,18 @@ public class Main {
 	final static double VERSION = 1.0;
 	final static String TOD_SEARCHLOCATION = "http://transport.opendata.ch/v1/locations?query=";
 	final static String TOD_STATIONBOARD = "http://transport.opendata.ch/v1/stationboard?station=";
-	final static int NUM_SHOW_ROWS = 3;
+	final static int NUM_SHOW_ROWS = 100;
 	//Table formatting parameters
 	final static int TABLESIZE_NAME = 10;
 	final static int TABLESIZE_DEPTIME = 10;
+	final static SimpleDateFormat SDF = new SimpleDateFormat("YYYY-MM-dd'T'HH:mm:ssZZZZZ");
 
 	public static void main(String[] args) {
-
+		//Ansi ansi = new Ansi();
+		AnsiConsole.systemInstall();
+		Ansi ansi = new Ansi();
+		AnsiConsole.out.println(ansi.fg(Color.BLUE).a("Hey"));
+		System.out.println(ansi.eraseScreen().fg(Color.RED).a("Hello"));
 		System.out.println("Welcome to TerminalFahrplan " + VERSION);
 		String station = readStation();
 		System.out.println("Loading data for " + station + "...");
@@ -34,7 +44,7 @@ public class Main {
 		while (true) {
 			try {
 				clearConsole();
-				TerminalTable tt = new TerminalTable(new Row("Name", "Dep. Time"));
+				TerminalTable tt = new TerminalTable(new Row("Name", "Dep. Time", "Late"));
 				String url = TOD_STATIONBOARD + station;
 				url = url.replaceAll(" ", "%20");
 				JSONArray stationboard = readJsonFromUrl(url).getJSONArray("stationboard");
@@ -45,10 +55,26 @@ public class Main {
 					//Name
 					nextRow.addData(stationboard.getJSONObject(i).get("name"));
 					//Departure Time
-					Date departure = new Date(stationboard.getJSONObject(i).getJSONObject("stop").getLong("departureTimestamp") * 1000);
+					Date departure = dateFromString(stationboard.getJSONObject(i).getJSONObject("stop").get("departure").toString(), SDF);
+					//Date departure = new Date(stationboard.getJSONObject(i).getJSONObject("stop").getLong("departureTimestamp") * 1000);
 					SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 					nextRow.addData(sdf.format(departure));
-					//Next
+					//Too late
+					//2014-12-04T16:13:00+0100
+					String dateString = stationboard.getJSONObject(i).getJSONObject("stop").getJSONObject("prognosis").get("departure")
+							.toString();
+					if (dateString == "null")
+						nextRow.addData("");
+					else {
+						//2014-12-05T14:42:00+0100
+						//dateString = "2014-12-05T14:42:00+0100";
+						long tooLateTimeInMillis = dateFromString(dateString, SDF).getTime() - departure.getTime();
+						nextRow.addData(tooLateTimeInMillis / 60000 + "'");
+						//System.out.println(tooLateTimeInMillis / 60000);
+						//						sdf = new SimpleDateFormat("mm");
+						//						nextRow.addData(sdf.format(lateTime));
+						//						System.out.println("VERSP FOUND!!!");
+					}
 
 					tt.addEntry(nextRow);
 				}
@@ -75,12 +101,12 @@ public class Main {
 
 		do {
 			System.out.println("Please enter your location: ");
-			station = scanner.next();
+			station = scanner.nextLine();
 			try {
 				JSONArray stations = readJsonFromUrl(TOD_SEARCHLOCATION + station + "&type=station").getJSONArray("stations");
 				if (stations.length() > 0) {
 					System.out.println("Did you mean " + stations.getJSONObject(0).getString("name") + "? (y/n)");
-					String result = scanner.next();
+					String result = scanner.nextLine();
 					if (result.contains("y")) {
 						station = stations.getJSONObject(0).getString("name");
 						stationFound = true;
@@ -134,6 +160,18 @@ public class Main {
 		} catch (final Exception e) {
 			//  Handle any exceptions.
 		}
+	}
+
+	private static Date dateFromString(String s, SimpleDateFormat df) {
+		//DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		Date date = null;
+		try {
+			date = df.parse(s);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return date;
 	}
 
 }
