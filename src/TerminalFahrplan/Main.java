@@ -35,28 +35,36 @@ public class Main {
 		while (true) {
 			try {
 				clearConsole();
-				printHeader();
+				TerminalTable tt = new TerminalTable(new Row("Name", "Dep. Time"));
+				//printHeader();
 				String url = TOD_STATIONBOARD + station;
 				url = url.replaceAll(" ", "%20");
 				JSONArray stationboard = readJsonFromUrl(url).getJSONArray("stationboard");
 				//Min ;)
 				int numRows = NUM_SHOW_ROWS > stationboard.length() ? stationboard.length() : NUM_SHOW_ROWS;
 				for (int i = 0; i < numRows; i++) {
+					Row nextRow = new Row();
 					//Name
-					System.out.format("%-" + TABLESIZE_NAME + "s", stationboard.getJSONObject(i).get("name"));
+					nextRow.addData(stationboard.getJSONObject(i).get("name"));
+					//System.out.format("%-" + TABLESIZE_NAME + "s", stationboard.getJSONObject(i).get("name"));
 					//Departure Time
 					Date departure = new Date(stationboard.getJSONObject(i).getJSONObject("stop").getLong("departureTimestamp") * 1000);
 					SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-					System.out.format("%-" + TABLESIZE_DEPTIME + "s", sdf.format(departure));
+					//System.out.format("%-" + TABLESIZE_DEPTIME + "s", sdf.format(departure));
+					nextRow.addData(sdf.format(departure));
 					//Next
-					System.out.println("");
+					//System.out.println("");
+					tt.addEntry(nextRow);
 				}
-				Thread.sleep(1000);
+				tt.print();
+				Thread.sleep(3000);
 			} catch (IOException e) {
 				//Connection Error...
 			} catch (JSONException e) {
 				e.printStackTrace();
 			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (RowException e) {
 				e.printStackTrace();
 			}
 		}
@@ -130,13 +138,6 @@ public class Main {
 		} catch (final Exception e) {
 			//  Handle any exceptions.
 		}
-	}
-
-	private static void printHeader() {
-		System.out.format("%-" + TABLESIZE_NAME + "s", "Name");
-		System.out.format("%-" + TABLESIZE_DEPTIME + "s", "Dep. Time");
-		System.out.println();
-		System.out.println("----------------------------------------------------");
 	}
 
 }
