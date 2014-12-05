@@ -31,12 +31,10 @@ public class Main {
 		String station = readStation();
 		System.out.println("Loading data for " + station + "...");
 
-		//clearConsole();
 		while (true) {
 			try {
 				clearConsole();
 				TerminalTable tt = new TerminalTable(new Row("Name", "Dep. Time"));
-				//printHeader();
 				String url = TOD_STATIONBOARD + station;
 				url = url.replaceAll(" ", "%20");
 				JSONArray stationboard = readJsonFromUrl(url).getJSONArray("stationboard");
@@ -46,14 +44,12 @@ public class Main {
 					Row nextRow = new Row();
 					//Name
 					nextRow.addData(stationboard.getJSONObject(i).get("name"));
-					//System.out.format("%-" + TABLESIZE_NAME + "s", stationboard.getJSONObject(i).get("name"));
 					//Departure Time
 					Date departure = new Date(stationboard.getJSONObject(i).getJSONObject("stop").getLong("departureTimestamp") * 1000);
 					SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-					//System.out.format("%-" + TABLESIZE_DEPTIME + "s", sdf.format(departure));
 					nextRow.addData(sdf.format(departure));
 					//Next
-					//System.out.println("");
+
 					tt.addEntry(nextRow);
 				}
 				tt.print();
