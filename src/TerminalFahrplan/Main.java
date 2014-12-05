@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,30 +24,24 @@ public class Main {
 	final static double VERSION = 1.0;
 	final static String TOD_SEARCHLOCATION = "http://transport.opendata.ch/v1/locations?query=";
 	final static String TOD_STATIONBOARD = "http://transport.opendata.ch/v1/stationboard?station=";
-	final static int NUM_SHOW_ROWS = 100;
-	//Table formatting parameters
-	final static int TABLESIZE_NAME = 10;
-	final static int TABLESIZE_DEPTIME = 10;
+	final static int NUM_SHOW_ROWS = 20;
 	final static SimpleDateFormat SDF = new SimpleDateFormat("YYYY-MM-dd'T'HH:mm:ssZZZZZ");
 
 	public static void main(String[] args) {
 		//Ansi ansi = new Ansi();
 		AnsiConsole.systemInstall();
-		Ansi ansi = new Ansi();
-		AnsiConsole.out.println(ansi.fg(Color.BLUE).a("Hey"));
-		System.out.println(ansi.eraseScreen().fg(Color.RED).a("Hello"));
-		System.out.println("Welcome to TerminalFahrplan " + VERSION);
+		Ansi ansi = Ansi.ansi();
+
+		System.out.println(ansi.fg(Color.MAGENTA).a("Welcome to TerminalFahrplan " + VERSION).reset());
 		String station = readStation();
 		System.out.println("Loading data for " + station + "...");
 
 		while (true) {
 			try {
-				clearConsole();
 				TerminalTable tt = new TerminalTable(new Row("Name", "Dep. Time", "Late"));
 				String url = TOD_STATIONBOARD + station;
 				url = url.replaceAll(" ", "%20");
 				JSONArray stationboard = readJsonFromUrl(url).getJSONArray("stationboard");
-				//Min ;)
 				int numRows = NUM_SHOW_ROWS > stationboard.length() ? stationboard.length() : NUM_SHOW_ROWS;
 				for (int i = 0; i < numRows; i++) {
 					Row nextRow = new Row();
@@ -56,28 +49,22 @@ public class Main {
 					nextRow.addData(stationboard.getJSONObject(i).get("name"));
 					//Departure Time
 					Date departure = dateFromString(stationboard.getJSONObject(i).getJSONObject("stop").get("departure").toString(), SDF);
-					//Date departure = new Date(stationboard.getJSONObject(i).getJSONObject("stop").getLong("departureTimestamp") * 1000);
 					SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 					nextRow.addData(sdf.format(departure));
 					//Too late
-					//2014-12-04T16:13:00+0100
 					String dateString = stationboard.getJSONObject(i).getJSONObject("stop").getJSONObject("prognosis").get("departure")
 							.toString();
 					if (dateString == "null")
 						nextRow.addData("");
 					else {
-						//2014-12-05T14:42:00+0100
-						//dateString = "2014-12-05T14:42:00+0100";
 						long tooLateTimeInMillis = dateFromString(dateString, SDF).getTime() - departure.getTime();
 						nextRow.addData(tooLateTimeInMillis / 60000 + "'");
-						//System.out.println(tooLateTimeInMillis / 60000);
-						//						sdf = new SimpleDateFormat("mm");
-						//						nextRow.addData(sdf.format(lateTime));
-						//						System.out.println("VERSP FOUND!!!");
 					}
-
+					//Next
+					
 					tt.addEntry(nextRow);
 				}
+				System.out.println(ansi.eraseScreen());
 				tt.print();
 				Thread.sleep(3000);
 			} catch (IOException e) {
@@ -146,20 +133,6 @@ public class Main {
 			sb.append((char) cp);
 		}
 		return sb.toString();
-	}
-
-	private final static void clearConsole() {
-		try {
-			final String os = System.getProperty("os.name");
-
-			if (os.contains("Windows")) {
-				Runtime.getRuntime().exec("cls");
-			} else {
-				Runtime.getRuntime().exec("clear");
-			}
-		} catch (final Exception e) {
-			//  Handle any exceptions.
-		}
 	}
 
 	private static Date dateFromString(String s, SimpleDateFormat df) {
