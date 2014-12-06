@@ -92,7 +92,9 @@ public class Main {
 			System.out.println("Please enter your location: ");
 			station = scanner.nextLine();
 			try {
-				JSONArray stations = readJsonFromUrl(TOD_SEARCHLOCATION + station + "&type=station").getJSONArray("stations");
+				String url = TOD_SEARCHLOCATION + station + "&type=station";
+				url = url.replaceAll(" ", "%20");
+				JSONArray stations = readJsonFromUrl(url).getJSONArray("stations");
 				if (stations.length() > 0) {
 					System.out.println("Did you mean " + stations.getJSONObject(0).getString("name") + "? (y/n)");
 					String result = scanner.nextLine();
