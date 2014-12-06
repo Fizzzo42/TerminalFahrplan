@@ -30,16 +30,14 @@ public class Main {
 	public static void main(String[] args) {
 		AnsiConsole.systemInstall();
 		Ansi ansi = Ansi.ansi();
-
 		System.out.println(ansi.fg(Color.MAGENTA).a("Welcome to TerminalFahrplan " + VERSION).reset());
 		String station = readStation();
 		System.out.println("Loading data for " + station + "...");
 
 		while (true) {
 			try {
-				TerminalTable tt = new TerminalTable(new Row("Bezeichnung", "Von", "Abfahrt", "Versp."));
+				TerminalTable tt = new TerminalTable(new Row("Bezeichnung", "Von", "Nach", "Abfahrt", "Versp."));
 				String url = TOD_STATIONBOARD + station;
-				url = url.replaceAll(" ", "%20");
 				JSONArray stationboard = readJsonFromUrl(url).getJSONArray("stationboard");
 				int numRows = NUM_SHOW_ROWS > stationboard.length() ? stationboard.length() : NUM_SHOW_ROWS;
 				for (int i = 0; i < numRows; i++) {
@@ -48,6 +46,8 @@ public class Main {
 					nextRow.addData(stationboard.getJSONObject(i).get("name"));
 					//Von
 					nextRow.addData(stationboard.getJSONObject(i).getJSONObject("stop").getJSONObject("station").getString("name"));
+					//Nach
+					nextRow.addData(stationboard.getJSONObject(i).get("to"));
 					//Abfahrtszeit
 					Date departure = dateFromString(stationboard.getJSONObject(i).getJSONObject("stop").get("departure").toString(), SDF);
 					SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
@@ -93,7 +93,6 @@ public class Main {
 			station = scanner.nextLine();
 			try {
 				String url = TOD_SEARCHLOCATION + station + "&type=station";
-				url = url.replaceAll(" ", "%20");
 				JSONArray stations = readJsonFromUrl(url).getJSONArray("stations");
 				if (stations.length() > 0) {
 					System.out.println("Did you mean " + stations.getJSONObject(0).getString("name") + "? (y/n)");
@@ -119,6 +118,7 @@ public class Main {
 	}
 
 	private static JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
+		url = url.replaceAll(" ", "%20");
 		InputStream is = new URL(url).openStream();
 		try {
 			BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
@@ -140,12 +140,10 @@ public class Main {
 	}
 
 	private static Date dateFromString(String s, SimpleDateFormat df) {
-		//DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 		Date date = null;
 		try {
 			date = df.parse(s);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return date;
