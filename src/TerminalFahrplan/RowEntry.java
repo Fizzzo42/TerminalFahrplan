@@ -8,6 +8,11 @@ public class RowEntry {
 		this.obj = obj;
 	}
 
+	public RowEntry(Object obj, boolean important) {
+		this.obj = obj;
+		this.important = important;
+	}
+
 	public boolean isImportant() {
 		return important;
 	}

@@ -36,7 +36,6 @@ public class TerminalTable {
 	public void print() {
 		Ansi ansi = Ansi.ansi();
 		int columnCounter = 0;
-		//ansi.bg(Color.YELLOW);
 		//Print header
 		ansi.bg(Color.YELLOW);
 		for (int i = 0; i < header.size(); i++) {
@@ -53,7 +52,6 @@ public class TerminalTable {
 		for (int columnSize : columnSizes)
 			for (int i = 0; i < columnSize + COLUMNSIZE_OFFSET; i++)
 				lineBuilder.append('-');
-		//line += StringUtils.repeat("-", columnSize);
 		System.out.println(lineBuilder.toString());
 
 		for (Row entry : entries) {
@@ -62,7 +60,13 @@ public class TerminalTable {
 			if (entry.isImportant())
 				ansi.bg(Color.RED);
 			for (RowEntry rowEntry : entry.getData()) {
+				if (rowEntry.isImportant())
+					ansi.fg(Color.YELLOW);
+				else
+					ansi.fg(Color.DEFAULT);
+
 				ansi.format("%-" + (columnSizes[columnCounter] + COLUMNSIZE_OFFSET) + "s", rowEntry.getObj());
+				ansi.fg(Color.DEFAULT);
 				columnCounter++;
 			}
 			ansi.reset();
