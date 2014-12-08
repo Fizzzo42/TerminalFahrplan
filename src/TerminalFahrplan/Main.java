@@ -43,23 +43,23 @@ public class Main {
 				for (int i = 0; i < numRows; i++) {
 					Row nextRow = new Row();
 					//Bezeichnung
-					nextRow.addData(stationboard.getJSONObject(i).get("name"));
+					nextRow.addData(new RowEntry(stationboard.getJSONObject(i).get("name")));
 					//Von
-					nextRow.addData(stationboard.getJSONObject(i).getJSONObject("stop").getJSONObject("station").getString("name"));
+					nextRow.addData(new RowEntry(stationboard.getJSONObject(i).getJSONObject("stop").getJSONObject("station").getString("name")));
 					//Nach
-					nextRow.addData(stationboard.getJSONObject(i).get("to"));
+					nextRow.addData(new RowEntry(stationboard.getJSONObject(i).get("to")));
 					//Abfahrtszeit
 					Date departure = dateFromString(stationboard.getJSONObject(i).getJSONObject("stop").get("departure").toString(), SDF);
 					SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-					nextRow.addData(sdf.format(departure));
+					nextRow.addData(new RowEntry(sdf.format(departure)));
 					//Verspätung
 					String dateString = stationboard.getJSONObject(i).getJSONObject("stop").getJSONObject("prognosis").get("departure")
 							.toString();
 					if (dateString == "null")
-						nextRow.addData("");
+						nextRow.addData(new RowEntry(""));
 					else {
 						long tooLateTimeInMillis = dateFromString(dateString, SDF).getTime() - departure.getTime();
-						nextRow.addData(tooLateTimeInMillis / 60000 + "'");
+						nextRow.addData(new RowEntry(tooLateTimeInMillis / 60000 + "'"));
 						nextRow.setImportant(true);
 					}
 					//Next

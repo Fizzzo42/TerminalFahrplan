@@ -4,28 +4,36 @@ import java.util.ArrayList;
 
 public class Row {
 
-	private ArrayList<Object> data;
+	private ArrayList<RowEntry> data;
 	private boolean important = false;
 
 	public Row() {
 		data = new ArrayList<>();
 	}
 
-	public Row(Object... data) {
+	public Row(RowEntry... data) {
 		this();
-		for (Object s : data)
+		for (RowEntry s : data)
 			this.data.add(s);
 	}
 
-	public ArrayList<Object> getData() {
+	public Row(String... data) {
+		this();
+		for (String s : data) {
+			this.data.add(new RowEntry(s));
+		}
+
+	}
+
+	public ArrayList<RowEntry> getData() {
 		return data;
 	}
 
-	public void addData(Object data) {
+	public void addData(RowEntry data) {
 		this.data.add(data);
 	}
 
-	public Object get(int index) {
+	public RowEntry get(int index) {
 		return data.get(index);
 	}
 

@@ -22,7 +22,7 @@ public class TerminalTable {
 		this.header = header;
 		columnSizes = new int[this.header.getData().size()];
 		for (int i = 0; i < this.header.getData().size(); i++)
-			columnSizes[i] = ((String) this.header.get(i)).length();
+			columnSizes[i] = ((String) this.header.get(i).getObj()).length();
 	}
 
 	public void addEntry(Row row) throws RowException {
@@ -41,7 +41,7 @@ public class TerminalTable {
 		ansi.bg(Color.YELLOW);
 		for (int i = 0; i < header.size(); i++) {
 			int columnSize = columnSizes[columnCounter] + COLUMNSIZE_OFFSET;
-			ansi.format("%-" + columnSize + "s", header.get(i));
+			ansi.format("%-" + columnSize + "s", header.get(i).getObj());
 			columnCounter++;
 		}
 		ansi.reset();
@@ -61,8 +61,8 @@ public class TerminalTable {
 			ansi = Ansi.ansi();
 			if (entry.isImportant())
 				ansi.bg(Color.RED);
-			for (Object obj : entry.getData()) {
-				ansi.format("%-" + (columnSizes[columnCounter] + COLUMNSIZE_OFFSET) + "s", obj);
+			for (RowEntry rowEntry : entry.getData()) {
+				ansi.format("%-" + (columnSizes[columnCounter] + COLUMNSIZE_OFFSET) + "s", rowEntry.getObj());
 				columnCounter++;
 			}
 			ansi.reset();
@@ -73,7 +73,7 @@ public class TerminalTable {
 
 	private void refreshColumnSizes(Row row) {
 		for (int i = 0; i < row.getData().size(); i++)
-			columnSizes[i] = columnSizes[i] < ((String) row.getData().get(i)).length() ? ((String) row.getData().get(i)).length()
-					: columnSizes[i];
+			columnSizes[i] = columnSizes[i] < ((String) row.getData().get(i).getObj()).length() ? ((String) row.getData().get(i).getObj())
+					.length() : columnSizes[i];
 	}
 }
