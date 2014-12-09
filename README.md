@@ -26,3 +26,26 @@ API format:	**JSON**
 ## Main Goal
 Main goal is to create an Android Service Only Application which sends you push notifications when your train/bus/etc. is too late.  
 This project is more of a small test to get into working with API's.
+
+## Build Project
+
+Build and run application.
+
+```
+./gradlew run
+```
+
+Create an executable JAR
+
+```
+./gradlew installApp
+```
+
+## Edit project
+
+Generate Eclipse project files:
+
+```
+./gradlew eclipse
+```
+
