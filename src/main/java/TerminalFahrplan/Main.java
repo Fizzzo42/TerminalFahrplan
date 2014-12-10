@@ -15,59 +15,61 @@ public class Main {
 
 	final static double VERSION = 1.0;
 	final static String TOD_SEARCHLOCATION = "http://transport.opendata.ch/v1/locations?query=";
+	final static String TOD_STATIONBOARD = "http://transport.opendata.ch/v1/stationboard?station=";
+	final static String offlineFilePath = "/Users/Fizzzo/Documents/Workspace/TerminalFahrplan/offline_files/zuerichHB.json";
 
 	public static void main(String[] args) {
-		System.out.println("Wir sind " + args.length + " lang");
 		AnsiConsole.systemInstall();
 		Ansi ansi = Ansi.ansi();
 		System.out.println(ansi.fg(Color.MAGENTA).a("Welcome to TerminalFahrplan " + VERSION).reset());
 
 		switch (args.length) {
+		//Work with Offline Data
 		case 0:
-			System.out.println("Please give a data!");
 			try {
-				JSONArray stations = JSONStuff.readJsonFromFile(
-						"/Users/Fizzzo/Documents/Workspace/TerminalFahrplan/offline_files/zuerichHB.json").getJSONArray("stationboard");
-				;
+				JSONArray stations = JSONStuff.readJsonFromFile(offlineFilePath).getJSONArray("stationboard");
 				StationView stationViewer = new StationView(stations, false);
 				stationViewer.run();
 				stationViewer.join();
-
 			} catch (FileNotFoundException e2) {
-				e2.printStackTrace();
+				System.out.println("Couldn't find offline JSON file in:\n" + offlineFilePath);
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			break;
+		//Show StationBoard
 		case 1:
 			String station = args[0];
 			String url = TOD_SEARCHLOCATION + station + "&type=station";
-			JSONArray stations;
-
 			try {
-				stations = JSONStuff.readJsonFromUrl(url).getJSONArray("stations");
+				//Find Station which matches most
+				JSONArray stations = JSONStuff.readJsonFromUrl(url).getJSONArray("stations");
 				if (stations.length() > 0) {
 					station = stations.getJSONObject(0).getString("name");
-				}
-				JSONArray stationboard = JSONStuff.readJsonFromUrl(url).getJSONArray("stationboard");
-				StationView stationViewer = new StationView(stationboard, true);
-				stationViewer.start();
-				stationViewer.join();
+					url = TOD_STATIONBOARD + station;
+					JSONArray stationboard = JSONStuff.readJsonFromUrl(url).getJSONArray("stationboard");
+					StationView stationViewer = new StationView(stationboard, true);
+					stationViewer.start();
+					stationViewer.join();
+				} else
+					System.err.println("Couldn't find station " + station);
+
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			} catch (JSONException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
-				e.printStackTrace();
+				System.err.println("Connection to API Server failed!");
 			}
 			break;
+		//Show Route "From-To"
 		case 2:
 			System.out.println("Still TODO");
 			break;
 		default:
-			System.out.println("Too many input params.");
+			System.err.println("Too many input params. Please dont use more than 2!");
 		}
 
 	}

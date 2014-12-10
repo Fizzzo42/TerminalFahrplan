@@ -13,7 +13,6 @@ public class StationView extends Thread {
 	private JSONArray stationboard;
 	private boolean autoUpdate;
 
-	final static String TOD_STATIONBOARD = "http://transport.opendata.ch/v1/stationboard?station=";
 	final static int NUM_SHOW_ROWS = 20;
 	final static SimpleDateFormat SDF = new SimpleDateFormat("YYYY-MM-dd'T'HH:mm:ssZZZZZ"); //Given from the API
 
@@ -28,8 +27,6 @@ public class StationView extends Thread {
 			try {
 				Ansi ansi = Ansi.ansi();
 				TerminalTable tt = new TerminalTable(new Row("Bezeichnung", "Von", "Nach", "Abfahrt", "Versp."));
-				//				String url = TOD_STATIONBOARD + station;
-				//				JSONArray stationboard = JSONStuff.readJsonFromUrl(url).getJSONArray("stationboard");
 				int numRows = NUM_SHOW_ROWS > stationboard.length() ? stationboard.length() : NUM_SHOW_ROWS;
 				for (int i = 0; i < numRows; i++) {
 					Row nextRow = new Row();
