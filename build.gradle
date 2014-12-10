@@ -9,7 +9,7 @@ run {
 }
 
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {

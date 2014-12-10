@@ -36,7 +36,7 @@ public class Main {
 
 		while (true) {
 			try {
-				TerminalFahrplan.TerminalTable tt = new TerminalTable(new Row("Bezeichnung", "Von", "Nach", "Abfahrt", "Versp."));
+				TerminalTable tt = new TerminalTable(new Row("Bezeichnung", "Von", "Nach", "Abfahrt", "Versp."));
 				String url = TOD_STATIONBOARD + station;
 				JSONArray stationboard = readJsonFromUrl(url).getJSONArray("stationboard");
 				int numRows = NUM_SHOW_ROWS > stationboard.length() ? stationboard.length() : NUM_SHOW_ROWS;
