@@ -44,11 +44,13 @@ public class Main {
 			String station = args[0];
 			String url = TOD_SEARCHLOCATION + station + "&type=station";
 			try {
+				System.out.println("Loading location...");
 				//Find Station which matches most
 				JSONArray stations = JSONStuff.readJsonFromUrl(url).getJSONArray("stations");
 				if (stations.length() > 0) {
 					station = stations.getJSONObject(0).getString("name");
 					url = TOD_STATIONBOARD + station;
+					System.out.println("Loading stationboard for " + station);
 					JSONArray stationboard = JSONStuff.readJsonFromUrl(url).getJSONArray("stationboard");
 					StationView stationViewer = new StationView(stationboard, true);
 					stationViewer.start();
