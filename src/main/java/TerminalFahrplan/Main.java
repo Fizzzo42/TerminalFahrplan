@@ -16,9 +16,13 @@ public class Main {
 	final static double VERSION = 1.0;
 	final static String TOD_SEARCHLOCATION = "http://transport.opendata.ch/v1/locations?query=";
 	final static String TOD_STATIONBOARD = "http://transport.opendata.ch/v1/stationboard?station=";
-	final static String offlineFilePath = "/Users/Fizzzo/Documents/Workspace/TerminalFahrplan/offline_files/zuerichHB.json";
+
+	//	final static String offlineFilePath = "zuerichHB.json";
 
 	public static void main(String[] args) {
+
+		final String OFFLINEFILEPATH = replaceLast(System.getProperty("user.dir"), "bin", "lib") + "/zuerichHB.json";
+		System.out.println("Our path is " + OFFLINEFILEPATH);
 		AnsiConsole.systemInstall();
 		Ansi ansi = Ansi.ansi();
 		System.out.println(ansi.fg(Color.MAGENTA).a("Welcome to TerminalFahrplan " + VERSION).reset());
@@ -27,12 +31,12 @@ public class Main {
 		//Work with Offline Data
 		case 0:
 			try {
-				JSONArray stations = JSONStuff.readJsonFromFile(offlineFilePath).getJSONArray("stationboard");
+				JSONArray stations = JSONStuff.readJsonFromFile(OFFLINEFILEPATH).getJSONArray("stationboard");
 				StationView stationViewer = new StationView(stations, false);
 				stationViewer.start();
 				stationViewer.join();
 			} catch (FileNotFoundException e2) {
-				System.out.println("Couldn't find offline JSON file in:\n" + offlineFilePath);
+				System.out.println("Couldn't find offline JSON file in:\n" + OFFLINEFILEPATH);
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (InterruptedException e) {
@@ -74,6 +78,17 @@ public class Main {
 			System.err.println("Too many input params. Please dont use more than 2!");
 		}
 
+	}
+
+	private static String replaceLast(String input, String target, String replacement) {
+		StringBuilder b = new StringBuilder(input);
+		try {
+			b.replace(input.lastIndexOf(target), input.lastIndexOf(target) + 1, replacement);
+		} catch (StringIndexOutOfBoundsException e) {
+			return input;
+		}
+		input = b.toString();
+		return input;
 	}
 
 }
