@@ -12,13 +12,9 @@ public class TerminalTable {
 	private int columnSizes[];
 	private final static int COLUMNSIZE_OFFSET = 3;
 
-	public TerminalTable() {
-		//header = new ArrayList<>();
-		entries = new ArrayList<>();
-	}
 
 	public TerminalTable(Row header) {
-		this();
+		entries = new ArrayList<>();
 		this.header = header;
 		columnSizes = new int[this.header.getData().size()];
 		for (int i = 0; i < this.header.getData().size(); i++)

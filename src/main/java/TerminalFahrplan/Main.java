@@ -29,7 +29,7 @@ public class Main {
 			try {
 				JSONArray stations = JSONStuff.readJsonFromFile(offlineFilePath).getJSONArray("stationboard");
 				StationView stationViewer = new StationView(stations, false);
-				stationViewer.run();
+				stationViewer.start();
 				stationViewer.join();
 			} catch (FileNotFoundException e2) {
 				System.out.println("Couldn't find offline JSON file in:\n" + offlineFilePath);
