@@ -4,12 +4,45 @@ The idea is to have a Terminal Application which shows the timeline of a chosen 
 The service will be limited to switzerland only. Reason for that is the [chosen API](http://transport.opendata.ch "Swiss public transport API").
 ## Current State
 State: **In Progress** (about 80% finished)
-## How it works
-1. You are prompted to enter your station.  
-Enter **zuri** for example and press **y**  
-![Main View](img/introView.png "TerminalFahrplan")
-2. Done! Your View of the timing table will be refreshed every ***X*** seconds.  
-![Main View](img/mainView.png "TerminalFahrplan")  
+## Build Project
+
+Build and run application.
+
+```
+./gradlew run
+```
+
+Create an executable JAR
+
+```
+./gradlew installApp
+```
+## How to use
+* Option 1: Development Purpose - Show Stationboard from offline File (zuerichHB.json)
+	* Run without any parameters  
+		* ```
+		./gradlew installApp
+		```	
+		* ```
+		build/install/TerminalFahrplan/bin/TerminalFahrplan
+		```	
+* Option 2: Stationboard View with auto Update
+	* Run with 1 Parameter
+		* ```
+		./gradlew installApp
+		```	
+		* ```
+		build/install/TerminalFahrplan/bin/TerminalFahrplan Rapperswil
+		```	
+* Option 3: Coming soon...
+		
+## Edit project
+
+Generate Eclipse project files:
+
+```
+./gradlew eclipse
+```
 
 ## How to setup
 1. Open a Terminal and locate to the project path
@@ -27,25 +60,5 @@ API format:	**JSON**
 Main goal is to create an Android Service Only Application which sends you push notifications when your train/bus/etc. is too late.  
 This project is more of a small test to get into working with API's.
 
-## Build Project
 
-Build and run application.
-
-```
-./gradlew run
-```
-
-Create an executable JAR
-
-```
-./gradlew installApp
-```
-
-## Edit project
-
-Generate Eclipse project files:
-
-```
-./gradlew eclipse
-```
 
