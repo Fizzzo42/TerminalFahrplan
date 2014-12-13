@@ -12,7 +12,6 @@ public class TerminalTable {
 	private int columnSizes[];
 	private final static int COLUMNSIZE_OFFSET = 3;
 
-
 	public TerminalTable(Row header) {
 		entries = new ArrayList<>();
 		this.header = header;
@@ -33,7 +32,7 @@ public class TerminalTable {
 		Ansi ansi = Ansi.ansi();
 		int columnCounter = 0;
 		//Print header
-		ansi.bg(Color.YELLOW);
+		ansi.bg(Color.WHITE);
 		for (int i = 0; i < header.size(); i++) {
 			int columnSize = columnSizes[columnCounter] + COLUMNSIZE_OFFSET;
 			ansi.format("%-" + columnSize + "s", header.get(i).getObj());
@@ -54,10 +53,10 @@ public class TerminalTable {
 			columnCounter = 0; //New column
 			ansi = Ansi.ansi();
 			if (entry.isImportant())
-				ansi.bg(Color.RED);
+				ansi.bg(Color.YELLOW);
 			for (RowEntry rowEntry : entry.getData()) {
 				if (rowEntry.isImportant())
-					ansi.fg(Color.YELLOW);
+					ansi.fg(Color.RED);
 				else
 					ansi.fg(Color.DEFAULT);
 

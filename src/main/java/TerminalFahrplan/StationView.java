@@ -45,11 +45,15 @@ public class StationView extends Thread {
 					nextRow.addData(new RowEntry(sdf.format(departure)));
 					//Verspätung
 					String delay = current.getJSONObject("stop").get("delay").toString();
-					if (delay == "null")
+
+					if (delay == "null") {
 						delay = "";
-					else
+						nextRow.addData(new RowEntry(delay));
+					} else {
 						delay += "'";
-					nextRow.addData(new RowEntry(delay));
+						nextRow.addData(new RowEntry(delay, true));
+						nextRow.setImportant(true);
+					}
 					//Platform
 					String shouldplatform = current.getJSONObject("stop").getString("platform");
 					String prognosisPlatform = current.getJSONObject("stop").getJSONObject("prognosis").get("platform").toString();
@@ -58,7 +62,8 @@ public class StationView extends Thread {
 					else if (shouldplatform.contains(prognosisPlatform) || prognosisPlatform == "null")
 						nextRow.addData(new RowEntry(shouldplatform));
 					else {
-						nextRow.addData(new RowEntry(prognosisPlatform));
+						//Unusual Platform
+						nextRow.addData(new RowEntry(prognosisPlatform, true));
 						nextRow.setImportant(true);
 					}
 					tt.addEntry(nextRow);
