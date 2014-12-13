@@ -22,7 +22,7 @@ public class Main {
 
 		String parsedInput[] = parseInput(args);
 
-		final String OFFLINEFILEPATH = replaceLast(System.getProperty("user.dir"), "/bin/", "/lib/") + "/zuerichHB.json";
+		final String OFFLINEFILEPATH = replaceLast(System.getProperty("user.dir") + "/zuerichHB.json", "/bin/", "/lib/");
 		System.out.println("Our path is " + OFFLINEFILEPATH);
 		AnsiConsole.systemInstall();
 		Ansi ansi = Ansi.ansi();
@@ -102,7 +102,7 @@ public class Main {
 	private static String replaceLast(String input, String target, String replacement) {
 		StringBuilder b = new StringBuilder(input);
 		try {
-			b.replace(input.lastIndexOf(target), input.lastIndexOf(target) + 1, replacement);
+			b.replace(input.lastIndexOf(target), input.lastIndexOf(target) + target.length(), replacement);
 		} catch (StringIndexOutOfBoundsException e) {
 			return input;
 		}
