@@ -2,6 +2,7 @@ package TerminalFahrplan;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import networkCom.JSONStuff;
 
@@ -17,17 +18,17 @@ public class Main {
 	final static String TOD_SEARCHLOCATION = "http://transport.opendata.ch/v1/locations?query=";
 	final static String TOD_STATIONBOARD = "http://transport.opendata.ch/v1/stationboard?station=";
 
-	//	final static String offlineFilePath = "zuerichHB.json";
-
 	public static void main(String[] args) {
 
-		final String OFFLINEFILEPATH = replaceLast(System.getProperty("user.dir"), "bin", "lib") + "/zuerichHB.json";
+		String parsedInput[] = parseInput(args);
+
+		final String OFFLINEFILEPATH = replaceLast(System.getProperty("user.dir"), "/bin/", "/lib/") + "/zuerichHB.json";
 		System.out.println("Our path is " + OFFLINEFILEPATH);
 		AnsiConsole.systemInstall();
 		Ansi ansi = Ansi.ansi();
 		System.out.println(ansi.fg(Color.MAGENTA).a("Welcome to TerminalFahrplan " + VERSION).reset());
 
-		switch (args.length) {
+		switch (parsedInput.length) {
 		//Work with Offline Data
 		case 0:
 			try {
@@ -45,7 +46,7 @@ public class Main {
 			break;
 		//Show StationBoard
 		case 1:
-			String station = args[0];
+			String station = parsedInput[0];
 			String url = TOD_SEARCHLOCATION + station + "&type=station";
 			try {
 				System.out.println("Loading location...");
@@ -78,6 +79,24 @@ public class Main {
 			System.err.println("Too many input params. Please dont use more than 2!");
 		}
 
+	}
+
+	private static String[] parseInput(String[] args) {
+		ArrayList<String> result = new ArrayList<>();
+		String toAdd = "";
+		for (String s : args) {
+			if (result.size() < 2) {
+				if (s != "to")
+					toAdd += s;
+				else
+					result.add(toAdd);
+			} else
+				break;
+		}
+		if (toAdd != "")
+			result.add(toAdd);
+
+		return (String[]) result.toArray(new String[result.size()]);
 	}
 
 	private static String replaceLast(String input, String target, String replacement) {
