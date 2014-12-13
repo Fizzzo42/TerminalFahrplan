@@ -7,6 +7,7 @@ import java.util.Date;
 import org.fusesource.jansi.Ansi;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 public class StationView extends Thread {
 
@@ -29,27 +30,26 @@ public class StationView extends Thread {
 				TerminalTable tt = new TerminalTable(new Row("Bezeichnung", "Von", "Nach", "Abfahrt", "Versp."));
 				int numRows = NUM_SHOW_ROWS > stationboard.length() ? stationboard.length() : NUM_SHOW_ROWS;
 				for (int i = 0; i < numRows; i++) {
+					JSONObject current = stationboard.getJSONObject(i);
+					
 					Row nextRow = new Row();
 					//Bezeichnung
-					nextRow.addData(new RowEntry(stationboard.getJSONObject(i).get("name")));
+					nextRow.addData(new RowEntry(current.get("name")));
 					//Von
-					nextRow.addData(new RowEntry(stationboard.getJSONObject(i).getJSONObject("stop").getJSONObject("station").getString("name")));
+					nextRow.addData(new RowEntry(current.getJSONObject("stop").getJSONObject("station").getString("name")));
 					//Nach
-					nextRow.addData(new RowEntry(stationboard.getJSONObject(i).get("to")));
+					nextRow.addData(new RowEntry(current.get("to")));
 					//Abfahrtszeit
-					Date departure = dateFromString(stationboard.getJSONObject(i).getJSONObject("stop").get("departure").toString(), SDF);
+					Date departure = dateFromString(current.getJSONObject("stop").get("departure").toString(), SDF);
 					SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 					nextRow.addData(new RowEntry(sdf.format(departure)));
 					//Verspätung
-					String dateString = stationboard.getJSONObject(i).getJSONObject("stop").getJSONObject("prognosis").get("departure")
-							.toString();
-					if (dateString == "null")
-						nextRow.addData(new RowEntry(""));
-					else {
-						long tooLateTimeInMillis = dateFromString(dateString, SDF).getTime() - departure.getTime();
-						nextRow.addData(new RowEntry(tooLateTimeInMillis / 60000 + "'"));
-						nextRow.setImportant(true);
-					}
+					String delay = current.getJSONObject("stop").get("delay").toString();
+					if (delay == "null")
+						delay = "";
+					else
+						delay += "'";
+					nextRow.addData(new RowEntry(delay));
 					//Next
 
 					tt.addEntry(nextRow);
