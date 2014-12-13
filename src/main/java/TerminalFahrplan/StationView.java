@@ -27,11 +27,11 @@ public class StationView extends Thread {
 		do {
 			try {
 				Ansi ansi = Ansi.ansi();
-				TerminalTable tt = new TerminalTable(new Row("Bezeichnung", "Von", "Nach", "Abfahrt", "Versp."));
+				TerminalTable tt = new TerminalTable(new Row("Bezeichnung", "Von", "Nach", "Abfahrt", "Versp.", "Platform"));
 				int numRows = NUM_SHOW_ROWS > stationboard.length() ? stationboard.length() : NUM_SHOW_ROWS;
 				for (int i = 0; i < numRows; i++) {
 					JSONObject current = stationboard.getJSONObject(i);
-					
+
 					Row nextRow = new Row();
 					//Bezeichnung
 					nextRow.addData(new RowEntry(current.get("name")));
@@ -50,8 +50,17 @@ public class StationView extends Thread {
 					else
 						delay += "'";
 					nextRow.addData(new RowEntry(delay));
-					//Next
-
+					//Platform
+					String shouldplatform = current.getJSONObject("stop").getString("platform");
+					String prognosisPlatform = current.getJSONObject("stop").getJSONObject("prognosis").get("platform").toString();
+					if (shouldplatform == "" && prognosisPlatform == "null")
+						nextRow.addData(new RowEntry(""));
+					else if (shouldplatform.contains(prognosisPlatform) || prognosisPlatform == "null")
+						nextRow.addData(new RowEntry(shouldplatform));
+					else {
+						nextRow.addData(new RowEntry(prognosisPlatform));
+						nextRow.setImportant(true);
+					}
 					tt.addEntry(nextRow);
 				}
 				System.out.println(ansi.eraseScreen());
