@@ -17,24 +17,28 @@ Create an executable JAR
 ```
 ./gradlew installApp
 ```
+## How to install
+```
+./gradlew installApp
+```
 ## How to use
-* Option 1: Development Purpose - Show Stationboard from offline File (zuerichHB.json)
-	* Run without any parameters  
-		* ```
-		./gradlew installApp
-		```	
-		* ```
-		build/install/TerminalFahrplan/bin/TerminalFahrplan
-		```	
-* Option 2: Stationboard View with auto Update
-	* Run with 1 Parameter
-		* ```
-		./gradlew installApp
-		```	
-		* ```
-		build/install/TerminalFahrplan/bin/TerminalFahrplan Rapperswil
-		```	
-* Option 3: Coming soon...
+### Option 1: Development Purpose
+Run without any parameters
+
+```
+build/install/TerminalFahrplan/bin/TerminalFahrplan
+```	
+What it does?  
+
+* Shows Stationboard from offline File (zuerichHB.json)
+
+### Option 2: Stationboard View with auto Update
+Run with 1 Parameter (example: Rapperswil)
+
+```
+build/install/TerminalFahrplan/bin/TerminalFahrplan Rapperswil
+```	
+### Option 3: Under development...
 		
 ## Edit project
 
@@ -43,15 +47,8 @@ Generate Eclipse project files:
 ```
 ./gradlew eclipse
 ```
-
-## How to setup
-1. Open a Terminal and locate to the project path
-2. Run following Command:  
-`javac -cp "java-json.jar" src/TerminalFahrplan/Main.java`
-3. ***Coming soon...***
-
 ## Known issues
-- When loosing connection on entering station, you are prompted to reenter instead of auto connection retry.
+- What happens when loosing connection while looking up station name? ;)
 
 ## Used Technology
 Coding language: **Java**  
