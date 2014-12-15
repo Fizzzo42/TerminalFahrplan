@@ -1,8 +1,12 @@
 package TerminalFahrplan;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import networkCom.JSONStuff;
 
 import org.fusesource.jansi.Ansi;
 import org.json.JSONArray;
@@ -11,14 +15,14 @@ import org.json.JSONObject;
 
 public class StationView extends Thread {
 
-	private JSONArray stationboard;
+	private String url;
 	private boolean autoUpdate;
 
 	final static int NUM_SHOW_ROWS = 20;
 	final static SimpleDateFormat SDF = new SimpleDateFormat("YYYY-MM-dd'T'HH:mm:ssZZZZZ"); //Given from the API
 
-	public StationView(JSONArray stationboard, boolean autoUpdate) {
-		this.stationboard = stationboard;
+	public StationView(String url, boolean autoUpdate) {
+		this.url = url;
 		this.autoUpdate = autoUpdate;
 	}
 
@@ -26,6 +30,12 @@ public class StationView extends Thread {
 	public void run() {
 		do {
 			try {
+				JSONArray stationboard;
+				if (url.contains("http://"))
+					stationboard = JSONStuff.readJsonFromUrl(url).getJSONArray("stationboard");
+				else
+					stationboard = JSONStuff.readJsonFromFile(url).getJSONArray("stationboard");
+
 				Ansi ansi = Ansi.ansi();
 				TerminalTable tt = new TerminalTable(new Row("Bezeichnung", "Von", "Nach", "Abfahrt", "Versp.", "Platform"));
 				int numRows = NUM_SHOW_ROWS > stationboard.length() ? stationboard.length() : NUM_SHOW_ROWS;
@@ -75,8 +85,12 @@ public class StationView extends Thread {
 				e.printStackTrace();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
+			} catch (FileNotFoundException e2) {
+				System.out.println("Couldn't find offline JSON file in:\n" + url);
 			} catch (RowException e) {
 				e.printStackTrace();
+			} catch (IOException e) {
+				System.out.println("Retrying...");
 			}
 		} while (autoUpdate);
 	}

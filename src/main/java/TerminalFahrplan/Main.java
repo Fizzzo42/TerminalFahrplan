@@ -1,6 +1,5 @@
 package TerminalFahrplan;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -32,14 +31,9 @@ public class Main {
 		//Work with Offline Data
 		case 0:
 			try {
-				JSONArray stations = JSONStuff.readJsonFromFile(OFFLINEFILEPATH).getJSONArray("stationboard");
-				StationView stationViewer = new StationView(stations, false);
+				StationView stationViewer = new StationView(OFFLINEFILEPATH, false);
 				stationViewer.start();
 				stationViewer.join();
-			} catch (FileNotFoundException e2) {
-				System.out.println("Couldn't find offline JSON file in:\n" + OFFLINEFILEPATH);
-			} catch (IOException e) {
-				e.printStackTrace();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -56,8 +50,7 @@ public class Main {
 					station = stations.getJSONObject(0).getString("name");
 					url = TOD_STATIONBOARD + station;
 					System.out.println("Loading stationboard for " + station);
-					JSONArray stationboard = JSONStuff.readJsonFromUrl(url).getJSONArray("stationboard");
-					StationView stationViewer = new StationView(stationboard, true);
+					StationView stationViewer = new StationView(url, true);
 					stationViewer.start();
 					stationViewer.join();
 				} else
