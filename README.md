@@ -3,7 +3,8 @@
 The idea is to have a Terminal Application which shows the timeline of a chosen public transport station. It will refresh every ***X*** seconds so you have an always up-to-date view of the outgoing and incoming public transport in your area.  
 The service will be limited to switzerland only. Reason for that is the [chosen API](http://transport.opendata.ch "Swiss public transport API").
 ## Current State
-State: **In Progress** (about 80% finished)
+State: **In Progress** (about 80% finished)  
+![Main Stationboard View](img/mainView2.png "Stationboard")
 ## Build Project
 
 Build and run application.
