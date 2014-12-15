@@ -5,19 +5,7 @@ The service will be limited to switzerland only. Reason for that is the [chosen 
 ## Current State
 State: **In Progress** (about 80% finished)  
 ![Main Stationboard View](img/mainView2.png "Stationboard")
-## Build Project
 
-Build and run application.
-
-```
-./gradlew run
-```
-
-Create an executable JAR
-
-```
-./gradlew installApp
-```
 ## How to install
 ```
 ./gradlew installApp
