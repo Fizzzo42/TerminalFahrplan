@@ -22,7 +22,6 @@ public class Row {
 		for (String s : data) {
 			this.data.add(new RowEntry(s));
 		}
-
 	}
 
 	public ArrayList<RowEntry> getData() {
