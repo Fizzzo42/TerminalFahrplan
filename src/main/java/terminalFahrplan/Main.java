@@ -28,7 +28,7 @@ public class Main {
 		System.out.println(ansi.fg(Color.MAGENTA).a("Welcome to TerminalFahrplan " + VERSION).reset());
 
 		switch (parsedInput.length) {
-		//Work with Offline Data
+		// Work with Offline Data
 		case 0:
 			try {
 				StationView stationViewer = new StationView(OFFLINEFILEPATH, false);
@@ -38,13 +38,13 @@ public class Main {
 				e.printStackTrace();
 			}
 			break;
-		//Show StationBoard
+		// Show StationBoard
 		case 1:
 			String station = parsedInput[0];
 			String url = TOD_SEARCHLOCATION + station + "&type=station";
 			try {
 				System.out.println("Loading location...");
-				//Find Station which matches most
+				// Find Station which matches most
 				JSONArray stations = JSONStuff.readJsonFromUrl(url).getJSONArray("stations");
 				if (stations.length() > 0) {
 					station = stations.getJSONObject(0).getString("name");
@@ -64,7 +64,7 @@ public class Main {
 				System.err.println("Connection to API Server failed!");
 			}
 			break;
-		//Show Route "From-To"
+		// Show Route "From-To"
 		case 2:
 			System.out.println("Still TODO");
 			break;
@@ -80,7 +80,7 @@ public class Main {
 		for (String s : args) {
 			if (result.size() < 2) {
 				if (s != "to")
-					toAdd += s;
+					toAdd += s + " ";
 				else
 					result.add(toAdd);
 			} else
@@ -88,6 +88,9 @@ public class Main {
 		}
 		if (toAdd != "")
 			result.add(toAdd);
+
+		String lastString = result.get(result.size() - 1);
+		lastString = replaceLast(lastString, " ", "");
 
 		return result.toArray(new String[result.size()]);
 	}
