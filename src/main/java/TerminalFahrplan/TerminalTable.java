@@ -10,7 +10,7 @@ public class TerminalTable {
 	private Row header;
 	private ArrayList<Row> entries;
 	private int columnSizes[];
-	private final static int COLUMNSIZE_OFFSET = 3;
+	public final static int COLUMNSIZE_OFFSET = 3;
 
 	public TerminalTable(Row header) {
 		entries = new ArrayList<>();
@@ -24,14 +24,14 @@ public class TerminalTable {
 		if (row.getData().size() != header.getData().size())
 			throw new RowException(row.getData().size(), header.getData().size());
 		entries.add(row);
-		//Refresh columnSizes
+		// Refresh columnSizes
 		refreshColumnSizes(row);
 	}
 
 	public void print() {
 		Ansi ansi = Ansi.ansi();
 		int columnCounter = 0;
-		//Print header
+		// Print header
 		ansi.bg(Color.WHITE);
 		for (int i = 0; i < header.size(); i++) {
 			int columnSize = columnSizes[columnCounter] + COLUMNSIZE_OFFSET;
@@ -42,7 +42,7 @@ public class TerminalTable {
 		System.out.print(ansi);
 		System.out.println();
 
-		//Variable Line Length
+		// Variable Line Length
 		StringBuilder lineBuilder = new StringBuilder();
 		for (int columnSize : columnSizes)
 			for (int i = 0; i < columnSize + COLUMNSIZE_OFFSET; i++)
@@ -50,7 +50,7 @@ public class TerminalTable {
 		System.out.println(lineBuilder.toString());
 
 		for (Row entry : entries) {
-			columnCounter = 0; //New column
+			columnCounter = 0; // New column
 			ansi = Ansi.ansi();
 			if (entry.isImportant())
 				ansi.bg(Color.YELLOW);
@@ -72,7 +72,7 @@ public class TerminalTable {
 
 	private void refreshColumnSizes(Row row) {
 		for (int i = 0; i < row.getData().size(); i++)
-			columnSizes[i] = columnSizes[i] < ((String) row.getData().get(i).getObj()).length() ? ((String) row.getData().get(i).getObj())
-					.length() : columnSizes[i];
+			columnSizes[i] = columnSizes[i] < ((String) row.getData().get(i).getObj()).length() ? ((String) row
+					.getData().get(i).getObj()).length() : columnSizes[i];
 	}
 }
