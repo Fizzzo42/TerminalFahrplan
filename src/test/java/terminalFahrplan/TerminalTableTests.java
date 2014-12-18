@@ -18,16 +18,17 @@ public class TerminalTableTests {
 	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 	private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
 	private String headerData[] = { "First", "Second", "Third" };
+	private TerminalTable tt;
 
 	@Before
 	public void setUpStreams() {
 		System.setOut(new PrintStream(outContent));
 		System.setErr(new PrintStream(errContent));
+		tt = new TerminalTable(new Row(headerData));
 	}
 
 	@Test
 	public void headerTest() {
-		TerminalTable tt = new TerminalTable(new Row(headerData));
 		tt.print();
 		for (String header : headerData)
 			assertTrue(outContent.toString().contains(header));
@@ -35,7 +36,6 @@ public class TerminalTableTests {
 
 	@Test
 	public void headerFormatTest() {
-		TerminalTable tt = new TerminalTable(new Row(headerData));
 		tt.print();
 		StringBuilder outputBuilder = new StringBuilder();
 		for (String header : headerData) {
@@ -47,7 +47,6 @@ public class TerminalTableTests {
 
 	@Test
 	public void dynamicUnderlineLengthTest() {
-		TerminalTable tt = new TerminalTable(new Row(headerData));
 		tt.print();
 		int lineLength = 0;
 		for (String s : headerData) {
@@ -56,6 +55,27 @@ public class TerminalTableTests {
 		}
 		String dynamicUnderline = StringUtils.repeat("-", lineLength);
 		assertTrue(outContent.toString().contains(dynamicUnderline));
+	}
+
+	@Test
+	public void addRowTest() {
+		try {
+			tt.addEntry(new Row("I am first", "I am second", "And I am third"));
+			tt.addEntry(new Row(new RowEntry("I", true), new RowEntry("say"), new RowEntry("Hello", true)));
+		} catch (RowException e) {
+			fail();
+		}
+	}
+
+	@Test(expected = RowException.class)
+	public void addRowTooManyFailTest() throws RowException {
+		tt.addEntry(new Row("These", "are", "way", "too", "many", "entries", "for", "a", "table", "with", "the",
+				"header", "size", "of", "3"));
+	}
+
+	@Test(expected = RowException.class)
+	public void addRowTooFewFailTest() throws RowException {
+		tt.addEntry(new Row(new RowEntry("Hello", true)));
 	}
 
 	@After
