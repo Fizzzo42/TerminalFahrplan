@@ -19,7 +19,10 @@ public class StationView extends Thread {
 	private boolean autoUpdate;
 
 	final static int NUM_SHOW_ROWS = 20;
-	final static SimpleDateFormat SDF = new SimpleDateFormat("YYYY-MM-dd'T'HH:mm:ssZZZZZ"); //Given from the API
+	final static SimpleDateFormat SDF = new SimpleDateFormat("YYYY-MM-dd'T'HH:mm:ssZZZZZ"); // Given
+																							// from
+																							// the
+																							// API
 
 	public StationView(String url, boolean autoUpdate) {
 		this.url = url;
@@ -37,23 +40,25 @@ public class StationView extends Thread {
 					stationboard = JSONStuff.readJsonFromFile(url).getJSONArray("stationboard");
 
 				Ansi ansi = Ansi.ansi();
-				TerminalTable tt = new TerminalTable(new Row("Bezeichnung", "Von", "Nach", "Abfahrt", "Versp.", "Platform"));
+				TerminalTable tt = new TerminalTable(new Row("Bezeichnung", "Von", "Nach", "Abfahrt", "Versp.",
+						"Platform"));
 				int numRows = NUM_SHOW_ROWS > stationboard.length() ? stationboard.length() : NUM_SHOW_ROWS;
 				for (int i = 0; i < numRows; i++) {
 					JSONObject current = stationboard.getJSONObject(i);
 
 					Row nextRow = new Row();
-					//Bezeichnung
+					// Bezeichnung
 					nextRow.addData(new RowEntry(current.get("name")));
-					//Von
-					nextRow.addData(new RowEntry(current.getJSONObject("stop").getJSONObject("station").getString("name")));
-					//Nach
+					// Von
+					nextRow.addData(new RowEntry(current.getJSONObject("stop").getJSONObject("station")
+							.getString("name")));
+					// Nach
 					nextRow.addData(new RowEntry(current.get("to")));
-					//Abfahrtszeit
+					// Abfahrtszeit
 					Date departure = dateFromString(current.getJSONObject("stop").get("departure").toString(), SDF);
 					SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 					nextRow.addData(new RowEntry(sdf.format(departure)));
-					//Verspätung
+					// Verspätung
 					String delay = current.getJSONObject("stop").get("delay").toString();
 
 					if (delay == "null") {
@@ -64,15 +69,16 @@ public class StationView extends Thread {
 						nextRow.addData(new RowEntry(delay, true));
 						nextRow.setImportant(true);
 					}
-					//Platform
+					// Platform
 					String shouldplatform = current.getJSONObject("stop").getString("platform");
-					String prognosisPlatform = current.getJSONObject("stop").getJSONObject("prognosis").get("platform").toString();
+					String prognosisPlatform = current.getJSONObject("stop").getJSONObject("prognosis").get("platform")
+							.toString();
 					if (shouldplatform == "" && prognosisPlatform == "null")
 						nextRow.addData(new RowEntry(""));
 					else if (shouldplatform.contains(prognosisPlatform) || prognosisPlatform == "null")
 						nextRow.addData(new RowEntry(shouldplatform));
 					else {
-						//Unusual Platform
+						// Unusual Platform
 						nextRow.addData(new RowEntry(prognosisPlatform, true));
 						nextRow.setImportant(true);
 					}

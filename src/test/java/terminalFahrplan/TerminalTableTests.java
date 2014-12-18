@@ -63,7 +63,7 @@ public class TerminalTableTests {
 			tt.addEntry(new Row("I am first", "I am second", "And I am third"));
 			tt.addEntry(new Row(new RowEntry("I", true), new RowEntry("say"), new RowEntry("Hello", true)));
 		} catch (RowException e) {
-			fail();
+			fail("Rows couldn't be added");
 		}
 	}
 

@@ -3,6 +3,7 @@ package terminalFahrplan;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import myUtils.StringMethods;
 import networkCom.JSONStuff;
 
 import org.fusesource.jansi.Ansi;
@@ -21,7 +22,8 @@ public class Main {
 
 		String parsedInput[] = parseInput(args);
 
-		final String OFFLINEFILEPATH = replaceLast(System.getProperty("user.dir") + "/zuerichHB.json", "/bin/", "/lib/");
+		final String OFFLINEFILEPATH = StringMethods.replaceLast(System.getProperty("user.dir") + "/zuerichHB.json",
+				"/bin/", "/lib/");
 		System.out.println("Our path is " + OFFLINEFILEPATH);
 		AnsiConsole.systemInstall();
 		Ansi ansi = Ansi.ansi();
@@ -90,20 +92,9 @@ public class Main {
 			result.add(toAdd);
 
 		String lastString = result.get(result.size() - 1);
-		lastString = replaceLast(lastString, " ", "");
+		lastString = StringMethods.replaceLast(lastString, " ", "");
 
 		return result.toArray(new String[result.size()]);
-	}
-
-	private static String replaceLast(String input, String target, String replacement) {
-		StringBuilder b = new StringBuilder(input);
-		try {
-			b.replace(input.lastIndexOf(target), input.lastIndexOf(target) + target.length(), replacement);
-		} catch (StringIndexOutOfBoundsException e) {
-			return input;
-		}
-		input = b.toString();
-		return input;
 	}
 
 }
