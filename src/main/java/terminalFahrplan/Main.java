@@ -1,9 +1,10 @@
 package terminalFahrplan;
 
+import helpers.StringHelpers;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
-import myUtils.StringMethods;
 import networkCom.JSONStuff;
 
 import org.fusesource.jansi.Ansi;
@@ -20,11 +21,10 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		String parsedInput[] = parseInput(args);
+		String parsedInput[] = StringHelpers.parseInput(args);
 
-		final String OFFLINEFILEPATH = StringMethods.replaceLast(System.getProperty("user.dir") + "/zuerichHB.json",
+		final String OFFLINEFILEPATH = StringHelpers.replaceLast(System.getProperty("user.dir") + "/zuerichHB.json",
 				"/bin/", "/lib/");
-		System.out.println("Our path is " + OFFLINEFILEPATH);
 		AnsiConsole.systemInstall();
 		Ansi ansi = Ansi.ansi();
 		System.out.println(ansi.fg(Color.MAGENTA).a("Welcome to TerminalFahrplan " + VERSION).reset());
@@ -74,27 +74,6 @@ public class Main {
 			System.err.println("Too many input params. Please dont use more than 2!");
 		}
 
-	}
-
-	private static String[] parseInput(String[] args) {
-		ArrayList<String> result = new ArrayList<>();
-		String toAdd = "";
-		for (String s : args) {
-			if (result.size() < 2) {
-				if (s != "to")
-					toAdd += s + " ";
-				else
-					result.add(toAdd);
-			} else
-				break;
-		}
-		if (toAdd != "")
-			result.add(toAdd);
-
-		String lastString = result.get(result.size() - 1);
-		lastString = StringMethods.replaceLast(lastString, " ", "");
-
-		return result.toArray(new String[result.size()]);
 	}
 
 }

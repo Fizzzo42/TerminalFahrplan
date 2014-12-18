@@ -44,44 +44,28 @@ public class StationView extends Thread {
 						"Platform"));
 				int numRows = NUM_SHOW_ROWS > stationboard.length() ? stationboard.length() : NUM_SHOW_ROWS;
 				for (int i = 0; i < numRows; i++) {
-					JSONObject current = stationboard.getJSONObject(i);
+					JSONObject route = stationboard.getJSONObject(i);
 
 					Row nextRow = new Row();
 					// Bezeichnung
-					nextRow.addData(new RowEntry(current.get("name")));
+					nextRow.addData(getDescription(route));
 					// Von
-					nextRow.addData(new RowEntry(current.getJSONObject("stop").getJSONObject("station")
-							.getString("name")));
+					nextRow.addData(getFrom(route));
 					// Nach
-					nextRow.addData(new RowEntry(current.get("to")));
+					nextRow.addData(getTo(route));
 					// Abfahrtszeit
-					Date departure = dateFromString(current.getJSONObject("stop").get("departure").toString(), SDF);
-					SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-					nextRow.addData(new RowEntry(sdf.format(departure)));
+					nextRow.addData(getDepartureTime(route));
 					// Verspätung
-					String delay = current.getJSONObject("stop").get("delay").toString();
-
-					if (delay == "null") {
-						delay = "";
-						nextRow.addData(new RowEntry(delay));
-					} else {
-						delay += "'";
-						nextRow.addData(new RowEntry(delay, true));
+					RowEntry entry = getDelay(route);
+					if (entry.isImportant())
 						nextRow.setImportant(true);
-					}
+					nextRow.addData(entry);
 					// Platform
-					String shouldplatform = current.getJSONObject("stop").getString("platform");
-					String prognosisPlatform = current.getJSONObject("stop").getJSONObject("prognosis").get("platform")
-							.toString();
-					if (shouldplatform == "" && prognosisPlatform == "null")
-						nextRow.addData(new RowEntry(""));
-					else if (shouldplatform.contains(prognosisPlatform) || prognosisPlatform == "null")
-						nextRow.addData(new RowEntry(shouldplatform));
-					else {
-						// Unusual Platform
-						nextRow.addData(new RowEntry(prognosisPlatform, true));
+					entry = getPlatform(route);
+					if (entry.isImportant())
 						nextRow.setImportant(true);
-					}
+					nextRow.addData(entry);
+					// Add Row to table
 					tt.addEntry(nextRow);
 				}
 				System.out.println(ansi.eraseScreen());
@@ -101,7 +85,7 @@ public class StationView extends Thread {
 		} while (autoUpdate);
 	}
 
-	private Date dateFromString(String s, SimpleDateFormat df) {
+	protected Date dateFromString(String s, SimpleDateFormat df) {
 		Date date = null;
 		try {
 			date = df.parse(s);
@@ -109,6 +93,53 @@ public class StationView extends Thread {
 			e.printStackTrace();
 		}
 		return date;
+	}
+
+	protected RowEntry getDescription(JSONObject route) {
+		return new RowEntry(route.get("name"));
+	}
+
+	protected RowEntry getFrom(JSONObject route) {
+		return new RowEntry(route.getJSONObject("stop").getJSONObject("station").getString("name"));
+	}
+
+	protected RowEntry getTo(JSONObject route) {
+		return new RowEntry(route.get("to"));
+	}
+
+	protected RowEntry getDepartureTime(JSONObject route) {
+		Date departure = dateFromString(route.getJSONObject("stop").get("departure").toString(), SDF);
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+		return new RowEntry(sdf.format(departure));
+	}
+
+	protected RowEntry getDelay(JSONObject route) {
+		String delay = route.getJSONObject("stop").get("delay").toString();
+		boolean important = false;
+		if (delay == "null") {
+			delay = "";
+		} else {
+			important = true;
+			delay += "'";
+		}
+		return new RowEntry(delay, important);
+	}
+
+	protected RowEntry getPlatform(JSONObject route) {
+		String result;
+		boolean important = false;
+		String shouldplatform = route.getJSONObject("stop").getString("platform");
+		String prognosisPlatform = route.getJSONObject("stop").getJSONObject("prognosis").get("platform").toString();
+		if (shouldplatform == "" && prognosisPlatform == "null")
+			result = "";
+		else if (shouldplatform.contains(prognosisPlatform) || prognosisPlatform == "null")
+			result = shouldplatform;
+		else {
+			// Unusual Platform
+			result = prognosisPlatform;
+			important = true;
+		}
+		return new RowEntry(result, important);
 	}
 
 }

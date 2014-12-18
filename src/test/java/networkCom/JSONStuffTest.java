@@ -1,10 +1,9 @@
 package networkCom;
 
 import static org.junit.Assert.*;
+import helpers.StringHelpers;
 
 import java.io.IOException;
-
-import myUtils.StringMethods;
 
 import org.json.JSONException;
 import org.junit.Before;
@@ -16,7 +15,7 @@ public class JSONStuffTest {
 
 	@Before
 	public void setUp() {
-		offlineFilePath = StringMethods.replaceLast(System.getProperty("user.dir") + "/zuerichHB.json", "/bin/",
+		offlineFilePath = StringHelpers.replaceLast(System.getProperty("user.dir") + "/zuerichHB.json", "/bin/",
 				"/lib/");
 	}
 
