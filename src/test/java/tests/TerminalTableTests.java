@@ -60,6 +60,7 @@ public class TerminalTableTests {
 		assertTrue(outContent.toString().contains(dynamicUnderline));
 	}
 
+
 	@After
 	public void cleanUpStreams() {
 		System.setOut(null);
