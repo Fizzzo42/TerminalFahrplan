@@ -1,4 +1,4 @@
-package TerminalFahrplan;
+package terminalFahrplan;
 
 import java.util.ArrayList;
 
@@ -71,7 +71,7 @@ public class TerminalTable {
 		}
 	}
 
-	private void refreshColumnSizes(Row row) {
+	protected void refreshColumnSizes(Row row) {
 		for (int i = 0; i < row.getData().size(); i++)
 			columnSizes[i] = columnSizes[i] < ((String) row.getData().get(i).getObj()).length() ? ((String) row
 					.getData().get(i).getObj()).length() : columnSizes[i];

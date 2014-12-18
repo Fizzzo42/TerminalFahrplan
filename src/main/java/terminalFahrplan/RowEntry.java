@@ -1,4 +1,4 @@
-package TerminalFahrplan;
+package terminalFahrplan;
 
 public class RowEntry {
 	private Object obj;

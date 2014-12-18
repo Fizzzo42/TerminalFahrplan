@@ -1,4 +1,4 @@
-package TerminalFahrplan;
+package terminalFahrplan;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package TerminalFahrplan;
+package terminalFahrplan;
 
 import java.util.ArrayList;
 
