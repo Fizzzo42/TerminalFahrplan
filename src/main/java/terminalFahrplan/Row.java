@@ -29,6 +29,8 @@ public class Row {
 	}
 
 	public void addData(RowEntry data) {
+		if (data.isImportant())
+			setImportant(true);
 		this.data.add(data);
 	}
 

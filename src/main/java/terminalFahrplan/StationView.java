@@ -45,7 +45,6 @@ public class StationView extends Thread {
 				int numRows = NUM_SHOW_ROWS > stationboard.length() ? stationboard.length() : NUM_SHOW_ROWS;
 				for (int i = 0; i < numRows; i++) {
 					JSONObject route = stationboard.getJSONObject(i);
-
 					Row nextRow = new Row();
 					// Bezeichnung
 					nextRow.addData(getDescription(route));
@@ -56,15 +55,9 @@ public class StationView extends Thread {
 					// Abfahrtszeit
 					nextRow.addData(getDepartureTime(route));
 					// Verspätung
-					RowEntry entry = getDelay(route);
-					if (entry.isImportant())
-						nextRow.setImportant(true);
-					nextRow.addData(entry);
+					nextRow.addData(getDelay(route));
 					// Platform
-					entry = getPlatform(route);
-					if (entry.isImportant())
-						nextRow.setImportant(true);
-					nextRow.addData(entry);
+					nextRow.addData(getPlatform(route));
 					// Add Row to table
 					tt.addEntry(nextRow);
 				}
