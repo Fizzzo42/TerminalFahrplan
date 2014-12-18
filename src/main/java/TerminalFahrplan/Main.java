@@ -89,7 +89,7 @@ public class Main {
 		if (toAdd != "")
 			result.add(toAdd);
 
-		return (String[]) result.toArray(new String[result.size()]);
+		return result.toArray(new String[result.size()]);
 	}
 
 	private static String replaceLast(String input, String target, String replacement) {

@@ -16,6 +16,7 @@ dependencies {
     compile 'org.fusesource.jansi:jansi:1.9'
     compile 'org.json:json:20141113'
     compile files('zuerichHB.json')
+    compile 'org.apache.commons:commons-lang3:3.3.2'
 
     testCompile "junit:junit:4.11"
 }

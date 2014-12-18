@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,8 +41,7 @@ public class TerminalTableTests {
 		StringBuilder outputBuilder = new StringBuilder();
 		for (String header : headerData) {
 			outputBuilder.append(header);
-			for (int i = 0; i < TerminalTable.COLUMNSIZE_OFFSET; i++)
-				outputBuilder.append(" ");
+			outputBuilder.append(StringUtils.repeat(" ", TerminalTable.COLUMNSIZE_OFFSET));
 		}
 		assertTrue(outContent.toString().contains(outputBuilder.toString()));
 	}
@@ -54,12 +54,9 @@ public class TerminalTableTests {
 			lineLength += s.length();
 			lineLength += TerminalTable.COLUMNSIZE_OFFSET;
 		}
-		String dynamicUnderline = "";
-		for (int i = 0; i < lineLength; i++)
-			dynamicUnderline += "-";
+		String dynamicUnderline = StringUtils.repeat("-", lineLength);
 		assertTrue(outContent.toString().contains(dynamicUnderline));
 	}
-
 
 	@After
 	public void cleanUpStreams() {

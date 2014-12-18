@@ -2,6 +2,7 @@ package TerminalFahrplan;
 
 import java.util.ArrayList;
 
+import org.apache.commons.lang3.StringUtils;
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.Ansi.Color;
 
@@ -43,11 +44,11 @@ public class TerminalTable {
 		System.out.println();
 
 		// Variable Line Length
-		StringBuilder lineBuilder = new StringBuilder();
+		String underline = "";
 		for (int columnSize : columnSizes)
-			for (int i = 0; i < columnSize + COLUMNSIZE_OFFSET; i++)
-				lineBuilder.append('-');
-		System.out.println(lineBuilder.toString());
+			underline += StringUtils.repeat("-", columnSize + COLUMNSIZE_OFFSET);
+
+		System.out.println(underline);
 
 		for (Row entry : entries) {
 			columnCounter = 0; // New column
