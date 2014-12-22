@@ -1,5 +1,7 @@
 package terminalFahrplan;
 
+import helpers.StringHelpers;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
@@ -78,16 +80,6 @@ public class StationView extends Thread {
 		} while (autoUpdate);
 	}
 
-	static Date dateFromString(String s, SimpleDateFormat df) {
-		Date date = null;
-		try {
-			date = df.parse(s);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		return date;
-	}
-
 	static RowEntry getDescription(JSONObject route) {
 		return new RowEntry(route.get("name"));
 	}
@@ -101,7 +93,7 @@ public class StationView extends Thread {
 	}
 
 	static RowEntry getDepartureTime(JSONObject route) {
-		Date departure = dateFromString(route.getJSONObject("stop").get("departure").toString(), SDF);
+		Date departure = StringHelpers.dateFromString(route.getJSONObject("stop").get("departure").toString(), SDF);
 		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 		return new RowEntry(sdf.format(departure));
 	}
