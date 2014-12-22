@@ -78,7 +78,7 @@ public class StationView extends Thread {
 		} while (autoUpdate);
 	}
 
-	protected Date dateFromString(String s, SimpleDateFormat df) {
+	 Date dateFromString(String s, SimpleDateFormat df) {
 		Date date = null;
 		try {
 			date = df.parse(s);
@@ -88,25 +88,25 @@ public class StationView extends Thread {
 		return date;
 	}
 
-	protected RowEntry getDescription(JSONObject route) {
+	RowEntry getDescription(JSONObject route) {
 		return new RowEntry(route.get("name"));
 	}
 
-	protected RowEntry getFrom(JSONObject route) {
+	RowEntry getFrom(JSONObject route) {
 		return new RowEntry(route.getJSONObject("stop").getJSONObject("station").getString("name"));
 	}
 
-	protected RowEntry getTo(JSONObject route) {
+	 RowEntry getTo(JSONObject route) {
 		return new RowEntry(route.get("to"));
 	}
 
-	protected RowEntry getDepartureTime(JSONObject route) {
+	 RowEntry getDepartureTime(JSONObject route) {
 		Date departure = dateFromString(route.getJSONObject("stop").get("departure").toString(), SDF);
 		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 		return new RowEntry(sdf.format(departure));
 	}
 
-	protected RowEntry getDelay(JSONObject route) {
+	 RowEntry getDelay(JSONObject route) {
 		String delay = route.getJSONObject("stop").get("delay").toString();
 		boolean important = false;
 		if (delay == "null") {
@@ -118,7 +118,7 @@ public class StationView extends Thread {
 		return new RowEntry(delay, important);
 	}
 
-	protected RowEntry getPlatform(JSONObject route) {
+	 RowEntry getPlatform(JSONObject route) {
 		String result;
 		boolean important = false;
 		String shouldplatform = route.getJSONObject("stop").getString("platform");
