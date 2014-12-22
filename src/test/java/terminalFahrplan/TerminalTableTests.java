@@ -17,20 +17,20 @@ public class TerminalTableTests {
 
 	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 	private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
-	private String headerData[] = { "First", "Second", "Third" };
+	private final String HEADERDATA[] = { "First", "Second", "Third" };
 	private TerminalTable tt;
 
 	@Before
 	public void setUpStreams() {
 		System.setOut(new PrintStream(outContent));
 		System.setErr(new PrintStream(errContent));
-		tt = new TerminalTable(new Row(headerData));
+		tt = new TerminalTable(new Row(HEADERDATA));
 	}
 
 	@Test
 	public void headerTest() {
 		tt.print();
-		for (String header : headerData)
+		for (String header : HEADERDATA)
 			assertTrue(outContent.toString().contains(header));
 	}
 
@@ -38,7 +38,7 @@ public class TerminalTableTests {
 	public void headerFormatTest() {
 		tt.print();
 		StringBuilder outputBuilder = new StringBuilder();
-		for (String header : headerData) {
+		for (String header : HEADERDATA) {
 			outputBuilder.append(header);
 			outputBuilder.append(StringUtils.repeat(" ", TerminalTable.COLUMNSIZE_OFFSET));
 		}
@@ -49,7 +49,7 @@ public class TerminalTableTests {
 	public void dynamicUnderlineLengthTest() {
 		tt.print();
 		int lineLength = 0;
-		for (String s : headerData) {
+		for (String s : HEADERDATA) {
 			lineLength += s.length();
 			lineLength += TerminalTable.COLUMNSIZE_OFFSET;
 		}
