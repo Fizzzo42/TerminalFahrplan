@@ -2,9 +2,15 @@ package terminalFahrplan;
 
 import java.util.ArrayList;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class Row {
 
+	@Getter
 	private ArrayList<RowEntry> data;
+	@Getter
+	@Setter
 	private boolean important = false;
 
 	public Row() {
@@ -24,10 +30,6 @@ public class Row {
 		}
 	}
 
-	public ArrayList<RowEntry> getData() {
-		return data;
-	}
-
 	public void addData(RowEntry data) {
 		if (data.isImportant())
 			setImportant(true);
@@ -40,14 +42,6 @@ public class Row {
 
 	public int size() {
 		return data.size();
-	}
-
-	public boolean isImportant() {
-		return important;
-	}
-
-	public void setImportant(boolean important) {
-		this.important = important;
 	}
 
 }

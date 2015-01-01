@@ -39,7 +39,7 @@ public class StationViewTests {
 	@Test
 	public void getDescriptionTest() {
 		for (int i = 0; i < stationboard.length(); i++) {
-			if (StationView.getDescription(stationboard.getJSONObject(i)).getObj() == null)
+			if (StationView.fetchDescription(stationboard.getJSONObject(i)).getObj() == null)
 				fail("Couldn't get \"description\"");
 		}
 	}
@@ -47,7 +47,7 @@ public class StationViewTests {
 	@Test
 	public void getFromTest() {
 		for (int i = 0; i < stationboard.length(); i++) {
-			if (StationView.getFrom(stationboard.getJSONObject(i)).getObj() == null)
+			if (StationView.fetchFrom(stationboard.getJSONObject(i)).getObj() == null)
 				fail("Couldn't get \"From\"");
 		}
 	}
@@ -55,7 +55,7 @@ public class StationViewTests {
 	@Test
 	public void getToTest() {
 		for (int i = 0; i < stationboard.length(); i++) {
-			if (StationView.getTo(stationboard.getJSONObject(i)).getObj() == null)
+			if (StationView.fetchTo(stationboard.getJSONObject(i)).getObj() == null)
 				fail("Couldn't get \"To\"");
 		}
 	}
@@ -63,7 +63,7 @@ public class StationViewTests {
 	@Test
 	public void getDepartureTimeTest() {
 		for (int i = 0; i < stationboard.length(); i++) {
-			if (StationView.getDepartureTime(stationboard.getJSONObject(i)).getObj() == null)
+			if (StationView.fetchDepartureTime(stationboard.getJSONObject(i)).getObj() == null)
 				fail("Couldn't get \"Departure Time\"");
 		}
 	}
@@ -71,7 +71,7 @@ public class StationViewTests {
 	@Test
 	public void getDelayTest() {
 		for (int i = 0; i < stationboard.length(); i++) {
-			RowEntry delay = StationView.getDelay(stationboard.getJSONObject(i));
+			RowEntry delay = StationView.fetchDelay(stationboard.getJSONObject(i));
 			if (delay.getObj() == null)
 				fail("Couldn't get \"From\"");
 			else {
@@ -86,7 +86,7 @@ public class StationViewTests {
 	@Test
 	public void getPlatformTest() {
 		for (int i = 0; i < stationboard.length(); i++) {
-			if (StationView.getPlatform(stationboard.getJSONObject(i)).getObj() == null)
+			if (StationView.fetchPlatform(stationboard.getJSONObject(i)).getObj() == null)
 				fail("Couldn't get \"Platform\"");
 		}
 	}

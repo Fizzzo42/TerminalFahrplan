@@ -49,17 +49,17 @@ public class StationView extends Thread {
 					JSONObject route = stationboard.getJSONObject(i);
 					Row nextRow = new Row();
 					// Bezeichnung
-					nextRow.addData(getDescription(route));
+					nextRow.addData(fetchDescription(route));
 					// Von
-					nextRow.addData(getFrom(route));
+					nextRow.addData(fetchFrom(route));
 					// Nach
-					nextRow.addData(getTo(route));
+					nextRow.addData(fetchTo(route));
 					// Abfahrtszeit
-					nextRow.addData(getDepartureTime(route));
+					nextRow.addData(fetchDepartureTime(route));
 					// Verspätung
-					nextRow.addData(getDelay(route));
+					nextRow.addData(fetchDelay(route));
 					// Platform
-					nextRow.addData(getPlatform(route));
+					nextRow.addData(fetchPlatform(route));
 					// Add Row to table
 					tt.addEntry(nextRow);
 				}
@@ -80,25 +80,25 @@ public class StationView extends Thread {
 		} while (autoUpdate);
 	}
 
-	static RowEntry getDescription(JSONObject route) {
+	static RowEntry fetchDescription(JSONObject route) {
 		return new RowEntry(route.get("name"));
 	}
 
-	static RowEntry getFrom(JSONObject route) {
+	static RowEntry fetchFrom(JSONObject route) {
 		return new RowEntry(route.getJSONObject("stop").getJSONObject("station").getString("name"));
 	}
 
-	static RowEntry getTo(JSONObject route) {
+	static RowEntry fetchTo(JSONObject route) {
 		return new RowEntry(route.get("to"));
 	}
 
-	static RowEntry getDepartureTime(JSONObject route) {
+	static RowEntry fetchDepartureTime(JSONObject route) {
 		Date departure = StringHelpers.dateFromString(route.getJSONObject("stop").get("departure").toString(), SDF);
 		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 		return new RowEntry(sdf.format(departure));
 	}
 
-	static RowEntry getDelay(JSONObject route) {
+	static RowEntry fetchDelay(JSONObject route) {
 		String delay = route.getJSONObject("stop").get("delay").toString();
 		boolean important = false;
 		if (delay == "null") {
@@ -110,7 +110,7 @@ public class StationView extends Thread {
 		return new RowEntry(delay, important);
 	}
 
-	static RowEntry getPlatform(JSONObject route) {
+	static RowEntry fetchPlatform(JSONObject route) {
 		String result;
 		boolean important = false;
 		String shouldplatform = route.getJSONObject("stop").getString("platform");
