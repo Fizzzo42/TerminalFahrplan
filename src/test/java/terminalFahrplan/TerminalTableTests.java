@@ -15,13 +15,15 @@ import terminalFahrplan.TerminalTable;
 
 public class TerminalTableTests {
 
-	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-	private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
+	private ByteArrayOutputStream outContent;
+	private ByteArrayOutputStream errContent;
 	private final String HEADERDATA[] = { "First", "Second", "Third" };
 	private TerminalTable tt;
 
 	@Before
 	public void setUpStreams() {
+		outContent = new ByteArrayOutputStream();
+		errContent = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(outContent));
 		System.setErr(new PrintStream(errContent));
 		tt = new TerminalTable(new Row(HEADERDATA));
