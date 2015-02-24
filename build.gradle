@@ -19,5 +19,5 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:3.3.2'
     compile 'org.projectlombok:lombok:1.14.8'
 
-    testCompile "junit:junit:4.11"
+    testCompile "junit:junit:4.12"
 }
