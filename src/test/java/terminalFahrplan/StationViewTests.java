@@ -15,11 +15,11 @@ import org.junit.Test;
 
 public class StationViewTests {
 
-	private String offlineFilePath;
-	JSONArray stationboard;
+	private static String offlineFilePath;
+	private static JSONArray stationboard;
 
 	@BeforeClass
-	public void setUp() throws JSONException, IOException {
+	public static void setUp() throws JSONException, IOException {
 		offlineFilePath = StringHelpers.replaceLast(Paths.get("").toAbsolutePath().toString() + "/zuerichHB.json",
 				"/bin/", "/lib/");
 		stationboard = JSONStuff.readJsonFromFile(offlineFilePath).getJSONArray("stationboard");

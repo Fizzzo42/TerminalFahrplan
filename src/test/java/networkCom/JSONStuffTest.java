@@ -13,10 +13,10 @@ import org.junit.Test;
 
 public class JSONStuffTest {
 
-	String offlineFilePath;
+	private static String offlineFilePath;
 
 	@BeforeClass
-	public void setUp() {
+	public static void setUp() {
 		offlineFilePath = StringHelpers.replaceLast(Paths.get("").toAbsolutePath().toString() + "/zuerichHB.json",
 				"/bin/", "/lib/");
 	}
