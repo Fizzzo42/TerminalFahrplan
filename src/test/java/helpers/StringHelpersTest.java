@@ -75,7 +75,7 @@ public class StringHelpersTest {
 	@Test
 	public void dateToStringTest() {
 		Date ourDate = StringHelpers.dateFromString("2014-12-18T17:19:00+0100", new SimpleDateFormat(
-				"YYYY-MM-dd'T'HH:mm:ssZZZZZ"));
+				"YYYY-MM-dd'T'HH:mm:ssZ"));
 		if (ourDate.getTime() != 1388420340000L)
 			fail();
 		// TODO: Check if correct

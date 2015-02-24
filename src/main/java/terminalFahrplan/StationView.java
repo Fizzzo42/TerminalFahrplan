@@ -21,10 +21,10 @@ public class StationView extends Thread {
 	private boolean autoUpdate;
 
 	final static int NUM_SHOW_ROWS = 20;
-	final static SimpleDateFormat SDF = new SimpleDateFormat("YYYY-MM-dd'T'HH:mm:ssZZZZZ"); // Given
-																							// from
-																							// the
-																							// API
+	final static SimpleDateFormat SDF = new SimpleDateFormat("YYYY-MM-dd'T'HH:mm:ssZ"); // Given
+																						// from
+																						// the
+																						// API
 
 	public StationView(String url, boolean autoUpdate) {
 		this.url = url;
