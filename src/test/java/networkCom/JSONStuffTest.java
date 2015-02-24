@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import helpers.StringHelpers;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 
 import org.json.JSONException;
 import org.junit.Before;
@@ -15,8 +16,8 @@ public class JSONStuffTest {
 
 	@Before
 	public void setUp() {
-		offlineFilePath = StringHelpers.replaceLast(System.getProperty("user.dir") + "/zuerichHB.json", "/bin/",
-				"/lib/");
+		offlineFilePath = StringHelpers.replaceLast(Paths.get("").toAbsolutePath().toString() + "/zuerichHB.json",
+				"/bin/", "/lib/");
 	}
 
 	@Test

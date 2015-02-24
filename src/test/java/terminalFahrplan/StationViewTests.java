@@ -4,6 +4,8 @@ import static org.junit.Assert.fail;
 import helpers.StringHelpers;
 
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import networkCom.JSONStuff;
 
@@ -19,8 +21,8 @@ public class StationViewTests {
 
 	@Before
 	public void setUp() throws JSONException, IOException {
-		offlineFilePath = StringHelpers.replaceLast(System.getProperty("user.dir") + "/zuerichHB.json", "/bin/",
-				"/lib/");
+		offlineFilePath = StringHelpers.replaceLast(Paths.get("").toAbsolutePath().toString() + "/zuerichHB.json",
+				"/bin/", "/lib/");
 		stationboard = JSONStuff.readJsonFromFile(offlineFilePath).getJSONArray("stationboard");
 		// JSONObject route = stationboard.getJSONObject(i);
 	}
