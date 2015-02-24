@@ -4,14 +4,13 @@ import static org.junit.Assert.fail;
 import helpers.StringHelpers;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import networkCom.JSONStuff;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class StationViewTests {
@@ -19,7 +18,7 @@ public class StationViewTests {
 	private String offlineFilePath;
 	JSONArray stationboard;
 
-	@Before
+	@BeforeClass
 	public void setUp() throws JSONException, IOException {
 		offlineFilePath = StringHelpers.replaceLast(Paths.get("").toAbsolutePath().toString() + "/zuerichHB.json",
 				"/bin/", "/lib/");

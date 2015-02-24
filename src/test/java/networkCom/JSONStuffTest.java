@@ -1,20 +1,21 @@
 package networkCom;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import helpers.StringHelpers;
 
 import java.io.IOException;
 import java.nio.file.Paths;
 
 import org.json.JSONException;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class JSONStuffTest {
 
 	String offlineFilePath;
 
-	@Before
+	@BeforeClass
 	public void setUp() {
 		offlineFilePath = StringHelpers.replaceLast(Paths.get("").toAbsolutePath().toString() + "/zuerichHB.json",
 				"/bin/", "/lib/");
